@@ -1,13 +1,12 @@
-import {Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-car-insurance-steps',
+  templateUrl: './car-insurance-steps.component.html',
+  styleUrls: ['./car-insurance-steps.component.css']
 })
-export class AppComponent {
-  title = 'car-insurance-app';
+export class CarInsuranceStepsComponent implements OnInit {
 
   isLinear = true;
   carDetailsFormGroup!: FormGroup;
@@ -47,7 +46,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.carDetailsFormGroup = this._formBuilder.group({
-      dateOfManufacture: [new Date(), Validators.required],
+      dateOfManufacture: ['', Validators.required],
       fuelType: ['', Validators.required],
       performance: ['', Validators.required],
       enginePerformance: ['', Validators.required],
@@ -69,4 +68,5 @@ export class AppComponent {
     console.log(this.contractDetailsFormGroup.value);
     console.log(this.personDetailsFormGroup.value);
   }
+
 }

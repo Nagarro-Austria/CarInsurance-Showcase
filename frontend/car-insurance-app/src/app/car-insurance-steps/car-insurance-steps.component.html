@@ -1,0 +1,96 @@
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="carDetailsFormGroup">
+    <form [formGroup]="carDetailsFormGroup">
+      <ng-template matStepLabel>Car Details</ng-template>
+      <mat-form-field>
+        <mat-label>Date of Manufacture</mat-label>
+        <input matInput placeholder="DateOfManufacture" formControlName="dateOfManufacture" type="date" required>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <!--
+        <mat-select placeholder="Fuel Type">
+          <mat-option *ngFor="let type of this.fuelTypeTable" [value]="type.value">
+            {{ type.viewValue }}
+          </mat-option>
+        </mat-select>
+        -->
+        <input matInput placeholder="FuelType" formControlName="fuelType" required>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <mat-label>CO2 [gramm]</mat-label>
+        <input matInput placeholder="EnginePerformance" formControlName="performance" type="number" required>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <mat-label>Engine Performance [kW]</mat-label>
+        <input matInput placeholder="EnginePerformance" formControlName="enginePerformance" type="number" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="contractDetailsFormGroup">
+    <form [formGroup]="contractDetailsFormGroup">
+      <ng-template matStepLabel>Contract Details</ng-template>
+      <mat-form-field>
+        <mat-label>Date of Contract</mat-label>
+        <input matInput placeholder="DateOfStart" formControlName="dateOfStart" type="date" required>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <mat-label>Coverage</mat-label>
+        <input matInput placeholder="Coverage" formControlName="coverage" required>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <!--
+        <mat-select placeholder="Bonus/Malus Level">
+          <mat-option *ngFor="let level of this.fuelTypeTable" [value]="level.value">
+            {{ level.viewValue }}
+          </mat-option>
+        </mat-select>
+        -->
+        <input matInput placeholder="Level" formControlName="level" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="personDetailsFormGroup">
+    <form [formGroup]="personDetailsFormGroup">
+      <ng-template matStepLabel>Person Details</ng-template>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Last name, First name" formControlName="name" required>
+      </mat-form-field>
+      <br/>
+      <mat-form-field>
+        <mat-label>Zip Code</mat-label>
+        <input matInput placeholder="ZipCode" formControlName="zipCode" required>
+      </mat-form-field>
+      <br/>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Summary</ng-template>
+    <p>You are now done.</p>
+
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button (click)="submit()">Submit</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
