@@ -14,10 +14,10 @@ export class CarInsuranceStepsComponent implements OnInit {
   personDetailsFormGroup!: FormGroup;
 
   fuelTypeTable = [
-    {value: 'steak-0', viewValue: 'Benzin'},
-    {value: 'pizza-1', viewValue: 'Diesel'},
-    {value: 'tacos-2', viewValue: 'Hybrid'},
-    {value: 'tacos-2', viewValue: 'Elektro'}
+    {value: 'benzin', viewValue: 'Benzin'},
+    {value: 'diesel', viewValue: 'Diesel'},
+    {value: 'hybrid', viewValue: 'Hybrid'},
+    {value: 'electro', viewValue: 'Elektro'}
   ];
 
   bonusMalusTable = [

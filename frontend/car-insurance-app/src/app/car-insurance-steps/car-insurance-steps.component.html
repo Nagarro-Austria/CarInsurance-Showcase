@@ -8,14 +8,11 @@
       </mat-form-field>
       <br/>
       <mat-form-field>
-        <!--
-        <mat-select placeholder="Fuel Type">
+        <mat-select placeholder="Fuel Type" formControlName="fuelType">
           <mat-option *ngFor="let type of this.fuelTypeTable" [value]="type.value">
             {{ type.viewValue }}
           </mat-option>
         </mat-select>
-        -->
-        <input matInput placeholder="FuelType" formControlName="fuelType" required>
       </mat-form-field>
       <br/>
       <mat-form-field>
@@ -47,14 +44,11 @@
       </mat-form-field>
       <br/>
       <mat-form-field>
-        <!--
-        <mat-select placeholder="Bonus/Malus Level">
-          <mat-option *ngFor="let level of this.fuelTypeTable" [value]="level.value">
+        <mat-select placeholder="Bonus/Malus Level" formControlName="level" >
+          <mat-option *ngFor="let level of this.bonusMalusTable" [value]="level.value">
             {{ level.viewValue }}
           </mat-option>
         </mat-select>
-        -->
-        <input matInput placeholder="Level" formControlName="level" required>
       </mat-form-field>
       <div>
         <button mat-button matStepperPrevious>Back</button>
