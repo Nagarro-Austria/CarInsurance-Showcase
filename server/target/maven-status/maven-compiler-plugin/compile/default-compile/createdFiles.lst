@@ -1,0 +1,7 @@
+com\craftmanship\insurance\service\TaxService.class
+com\craftmanship\insurance\service\LiabilityService.class
+com\craftmanship\insurance\model\CarInsuranceInputDTO.class
+com\craftmanship\insurance\controller\TaxCalculationController.class
+com\craftmanship\insurance\InsuranceServicesApplication.class
+com\craftmanship\insurance\model\TaxRequest.class
+com\craftmanship\insurance\controller\InsuranceCalculationController.class
