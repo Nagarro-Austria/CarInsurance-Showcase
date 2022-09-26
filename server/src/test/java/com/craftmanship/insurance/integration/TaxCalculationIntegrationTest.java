@@ -4,6 +4,8 @@ import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.TaxRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -22,39 +24,25 @@ public class TaxCalculationIntegrationTest {
     @LocalServerPort
     private int port;
 
-    TestRestTemplate restTemplate = new TestRestTemplate();
+    @ParameterizedTest
+    @CsvSource({"110, Benzin, 83.60"})
+    public void calculateTax(String power, String fuelType, String expectedPremium) {
 
-    HttpHeaders headers = new HttpHeaders();
-
-    @Test
-    public void healthCheck() {
-        TaxRequest input = new TaxRequest(135, 110, "Benzin", LocalDate.of(2021, 01, 01));
-        given()
-                .contentType("application/json")
-                .body(input)
-                .when()
-                .post(createURLWithPort("/tax"))
-                .then()
-                .statusCode(200);
-    }
-
-    @Test
-    public void calculateInsurance() {
         assertEquals(
-                BigDecimal.valueOf(83.60).setScale(2),
-                createRequest(135, 110, "Benzin", LocalDate.of(2021, 01, 01))
-                );
+                new BigDecimal(expectedPremium).setScale(2),
+                createRequest(135, Integer.valueOf(power), fuelType, LocalDate.of(2021, 01, 01))
+        );
     }
 
     private BigDecimal createRequest(int co2, int kw, String fuel, LocalDate registrationDate) {
         TaxRequest input = new TaxRequest(co2, kw, fuel, registrationDate);
 
         return given()
-                        .contentType("application/json")
-                        .body(input)
-                        .when()
-                        .post(createURLWithPort("/tax"))
-                        .as(BigDecimal.class);
+                .contentType("application/json")
+                .body(input)
+                .when()
+                .post(createURLWithPort("/tax"))
+                .as(BigDecimal.class);
     }
 
 
