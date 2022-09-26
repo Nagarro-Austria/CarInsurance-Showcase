@@ -10,7 +10,7 @@ import java.time.LocalDate;
 public class TaxService {
     public BigDecimal calculateTax(TaxRequest input) {
         BigDecimal tax = new BigDecimal(0);
-        if (input.registrationDate().isAfter(LocalDate.of(2020, 10, 1))) {
+        if (input.firstRegistration().isAfter(LocalDate.of(2020, 10, 1))) {
             tax = calculateAfter(input);
         }
         return null;

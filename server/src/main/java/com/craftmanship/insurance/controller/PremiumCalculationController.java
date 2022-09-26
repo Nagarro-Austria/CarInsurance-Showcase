@@ -1,7 +1,7 @@
 package com.craftmanship.insurance.controller;
 
 import com.craftmanship.insurance.model.CarInsuranceInputDTO;
-import com.craftmanship.insurance.service.LiabilityService;
+import com.craftmanship.insurance.service.PremiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/insurance")
-public class InsuranceCalculationController {
+@RequestMapping("/premium")
+public class PremiumCalculationController {
     @Autowired
-    private LiabilityService liabilityService;
+    private PremiumService liabilityService;
 
     @PostMapping()
-    public BigDecimal calculateInsurance(
-            @RequestBody CarInsuranceInputDTO input) {
+    public BigDecimal calculatePremium(@RequestBody CarInsuranceInputDTO input) {
 
-        BigDecimal result = liabilityService.calculateLiability(input);
+        BigDecimal result = liabilityService.calculatePremium(input);
 
         if (result == null)
             return BigDecimal.ZERO;

@@ -7,10 +7,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Service
-public class LiabilityService {
+public class PremiumService {
 
-    public BigDecimal calculateLiability(CarInsuranceInputDTO inputDTO) {
-        BigDecimal premium = calculateBasisPremium(inputDTO.kilowatt());
+    public BigDecimal calculatePremium(CarInsuranceInputDTO inputDTO) {
+        BigDecimal premium = calculateBasisPremium(inputDTO.power());
         premium = calculateBonusMalus(premium, inputDTO.bonusMalus());
         premium = calculateZipCodeRisk(premium, inputDTO.zipCode());
 

@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TaxCalculationIntegrationTestRest {
+public class TaxCalculationIntegrationTest {
     @LocalServerPort
     private int port;
 
