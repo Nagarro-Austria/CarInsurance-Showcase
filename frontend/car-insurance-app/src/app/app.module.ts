@@ -11,13 +11,11 @@ import {MatStepperModule} from "@angular/material/stepper";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
-import { MultiStepExampleComponent } from './multi-step-example/multi-step-example.component';
 import { CarInsuranceStepsComponent } from './car-insurance-steps/car-insurance-steps.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MultiStepExampleComponent,
     CarInsuranceStepsComponent
   ],
   imports: [

@@ -1,6 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
+interface InsuranceQuote {
+  name: string;
+  dayOfBirth: Date;
+  zipCode: number;
+  firstRegistration: Date;
+  fuelType: string;
+  co2Emissions: number;
+  power: number;
+  startDate: Date;
+  coverage: string;
+  bonusMaluslevel: string;
+  tax: number;
+  premium : number;
+}
+
 @Component({
   selector: 'app-car-insurance-steps',
   templateUrl: './car-insurance-steps.component.html',
@@ -14,10 +29,10 @@ export class CarInsuranceStepsComponent implements OnInit {
   personDetailsFormGroup!: FormGroup;
 
   fuelTypeTable = [
-    {value: 'benzin', viewValue: 'Benzin'},
+    {value: 'gasoline', viewValue: 'Gasoline'},
     {value: 'diesel', viewValue: 'Diesel'},
     {value: 'hybrid', viewValue: 'Hybrid'},
-    {value: 'electro', viewValue: 'Elektro'}
+    {value: 'electricity', viewValue: 'Electricity'}
   ];
 
   bonusMalusTable = [
@@ -40,21 +55,23 @@ export class CarInsuranceStepsComponent implements OnInit {
     {value: '16', viewValue: 'Malus-16'},
     {value: '17', viewValue: 'Malus-17'}
   ];
+  quote: InsuranceQuote | null;
 
   constructor(private _formBuilder: FormBuilder) {
+    this.quote = null;
   }
 
   ngOnInit() {
     this.carDetailsFormGroup = this._formBuilder.group({
-      dateOfManufacture: ['', Validators.required],
+      firstRegistration: ['', Validators.required],
       fuelType: ['', Validators.required],
-      performance: ['', Validators.required],
-      enginePerformance: ['', Validators.required],
+      co2Emissions: ['', Validators.required],
+      power: ['', Validators.required],
     });
     this.contractDetailsFormGroup = this._formBuilder.group({
-      dateOfStart: ['', Validators.required],
+      startDate: [new Date(), Validators.required],
       coverage: ['', Validators.required],
-      level: ['', Validators.required]
+      bonusMaluslevel: ['', Validators.required]
     });
     this.personDetailsFormGroup = this._formBuilder.group({
       name: ['', Validators.required],
@@ -66,7 +83,17 @@ export class CarInsuranceStepsComponent implements OnInit {
   submit() {
     console.log(this.carDetailsFormGroup.value);
     console.log(this.contractDetailsFormGroup.value);
-    console.log(this.personDetailsFormGroup.value);
+    console.log(this.contractDetailsFormGroup.value);
   }
 
+  calculate() {
+    this.quote =  {
+      ... this.personDetailsFormGroup.value,
+      ... this.contractDetailsFormGroup.value,
+      ... this.carDetailsFormGroup.value,
+      premium : 123,
+      tax: 10
+    };
+    console.log(this.quote);
+  }
 }
