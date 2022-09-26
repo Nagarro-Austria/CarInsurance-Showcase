@@ -2,47 +2,49 @@ package com.craftmanship.insurance.integration;
 
 import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.CarInsuranceInputDTO;
-import org.junit.jupiter.api.Test;
+import com.craftmanship.insurance.service.PremiumService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PremiumCalculationIntegrationTest {
+    public static final int NO_RISK_ZIP_CODE = 4000;
+    public static final int STANDARD_POWER = 100;
+    public static final int BONUS_MALUS_LEVEL = 9;
     @LocalServerPort
     private int port;
 
     @ParameterizedTest
-    @CsvSource({"100, 0, 4000, 44.00",
-            "100, 1, 4000, 44.00",
-            "100, 2, 4000, 52.80",
-            "100, 3, 4000, 52.80",
-            "100, 4, 4000, 61.60",
-            "100, 5, 4000, 61.60",
-            "100, 6, 4000, 70.40",
-            "100, 8, 4000, 88.00",
-            "100, 9, 4000, 88.00",
-            "100, 10, 4000, 105.60",
-            "100, 11, 4000, 105.60",
-            "100, 12, 4000, 123.20",
-            "100, 13, 4000, 123.20",
-            "100, 14, 4000, 149.60",
-            "100, 15, 4000, 149.60",
-            "100, 16, 4000, 176.00",
-            "100, 17, 4000, 176.00"})
-    public void calculatePremiumWithDifferentBonusMalusLevels(String power, String bonusMalusLevel, String zipCode, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(Integer.valueOf(power), Integer.valueOf(bonusMalusLevel), Integer.valueOf(zipCode));
+    @CsvSource({" 0, 44.00",
+            " 1, 44.00",
+            " 2, 52.80",
+            " 3, 52.80",
+            " 4, 61.60",
+            " 5, 61.60",
+            " 6, 70.40",
+            " 8, 88.00",
+            " 9, 88.00",
+            " 10, 105.60",
+            " 11, 105.60",
+            " 12, 123.20",
+            " 13, 123.20",
+            " 14, 149.60",
+            " 15, 149.60",
+            " 16, 176.00",
+            " 17, 176.00"})
+    public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
+        CarInsuranceInputDTO input = new CarInsuranceInputDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
         BigDecimal result =
                 given()
                         .contentType("application/json")
@@ -51,7 +53,49 @@ public class PremiumCalculationIntegrationTest {
                         .post(createURLWithPort("/premium"))
                         .as(BigDecimal.class);
 
-        assertEquals(result, new BigDecimal(expectedPremium));
+        assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"10, 23.80",
+            "27, 23.80",
+            "28, 24.70",
+            "146, 128.50",
+            "147, 132.00",
+            "200, 132.00"})
+    public void calculatePremiumWithDifferentPowerRanges(int power, String expectedPremium) {
+        CarInsuranceInputDTO input = new CarInsuranceInputDTO(power, 9, NO_RISK_ZIP_CODE);
+
+        BigDecimal result =
+                given()
+                        .contentType("application/json")
+                        .body(input)
+                        .when()
+                        .post(createURLWithPort("/premium"))
+                        .as(BigDecimal.class);
+
+        assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"1000, 83.60",
+            "3333, 83.60",
+            "3334, 88.00",
+            "6666, 88.00",
+            "6667, 92.40",
+            "9999, 92.40"})
+    public void calculatePremiumWithDifferentRiskLocations(int zipCode, String expectedPremium) {
+        CarInsuranceInputDTO input = new CarInsuranceInputDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
+
+        BigDecimal result =
+                given()
+                        .contentType("application/json")
+                        .body(input)
+                        .when()
+                        .post(createURLWithPort("/premium"))
+                        .as(BigDecimal.class);
+
+        assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
 
     private String createURLWithPort(String uri) {
