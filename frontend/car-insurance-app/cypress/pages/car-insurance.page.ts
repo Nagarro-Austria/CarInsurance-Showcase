@@ -11,10 +11,11 @@ export class CarInsurancePage {
 
     return {
       nextStep: function () {
-        cy.get('#gotocontract').contains('Next').click();
+        cy.get('#forwardToContract').contains('Next').click();
       },
-      previousStep: function () {
-        cy.get('#gotoperson').contains('Next').click();
+      setPower(power: number) {
+        cy.get('#power').clear();
+        cy.get('#power').type(power.toString());
       }
     }
   }
@@ -26,10 +27,10 @@ export class CarInsurancePage {
 
     return {
       nextStep: function () {
-        cy.get('#gotoperson').contains('Next').click();
+        cy.get('#forwardToPerson').contains('Next').click();
       },
       previousStep: function () {
-        cy.get('#gotoperson').contains('Next').click();
+        cy.get('#backToCar').contains('Back').click();
       }
     }
   }
@@ -41,10 +42,10 @@ export class CarInsurancePage {
 
     return {
       nextStep: function () {
-        cy.get('#gotosummary').contains('Next').click();
+        cy.get('#forwardToSummary').contains('Next').click();
       },
       previousStep: function () {
-        cy.get('#gotoperson').contains('Next').click();
+        cy.get('#backToContract').contains('Back').click();
       }
 
     }
@@ -58,4 +59,17 @@ export class CarInsurancePage {
     return cy.get('#premium');
   }
 
+  summary() {
+    return {
+      previousStep: function () {
+        cy.get('#backToPerson').contains('Back').click();
+      },
+      reset: function () {
+        cy.get('#resetQuote').contains('Reset').click();
+      },
+      submit: function () {
+        cy.get('#submitQuote').contains('Submit').click();
+      }
+    }
+  }
 }
