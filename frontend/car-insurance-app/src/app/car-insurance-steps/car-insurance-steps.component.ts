@@ -87,7 +87,7 @@ export class CarInsuranceStepsComponent implements OnInit {
 
   calculate() {
     this.quoteService
-      .calculateQuote2(this.contractDetailsFormGroup.value.co2Emissions,
+      .calculateQuote(this.carDetailsFormGroup.value.co2Emissions,
         this.carDetailsFormGroup.value.power,
         this.carDetailsFormGroup.value.fuelType,
         this.carDetailsFormGroup.value.firstRegistration,
