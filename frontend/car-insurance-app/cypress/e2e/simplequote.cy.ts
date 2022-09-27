@@ -9,8 +9,10 @@ describe('create a simple quote', () => {
   });
 
   it('for ..', () => {
+    const startDate = new Date().toISOString().slice(0, 10);
+
     page.carDetails('2020-12-01', 'Gasoline', 123, 100).nextStep();
-    page.contractDetails('2022-01-13', 'Liability', 'Bonus-0').nextStep();
+    page.contractDetails(startDate, 'Liability', 'Bonus-0').nextStep();
     page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
 
     page.getTax().contains('28.80');
