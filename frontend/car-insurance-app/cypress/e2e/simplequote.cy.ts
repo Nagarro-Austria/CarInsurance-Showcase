@@ -13,8 +13,8 @@ describe('create a simple quote', () => {
     page.contractDetails('2022-01-13', 'Liability', 'Bonus-0').nextStep();
     page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
 
-    page.getTax().contains('10');
-    page.getPremium().contains('123');
+    page.getTax().contains('28.80');
+    page.getPremium().contains('41.80');
   });
 
 });
