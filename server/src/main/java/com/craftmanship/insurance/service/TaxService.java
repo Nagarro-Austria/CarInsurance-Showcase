@@ -18,7 +18,7 @@ public class TaxService {
         if (input.fuelType().equals("electricity")) {
             return BigDecimal.ZERO.setScale(2);
         }
-        int co2Param = Math.max(input.co2Emmisions() - 115, 5);
+        int co2Param = Math.max(input.co2Emissions() - 115, 5);
         if (input.fuelType().equals("hybrid")) {
             co2Param = 0;
         }
