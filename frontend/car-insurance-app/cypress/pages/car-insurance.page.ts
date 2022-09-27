@@ -12,6 +12,9 @@ export class CarInsurancePage {
     return {
       nextStep: function () {
         cy.get('#gotocontract').contains('Next').click();
+      },
+      previousStep: function () {
+        cy.get('#gotoperson').contains('Next').click();
       }
     }
   }
@@ -23,6 +26,9 @@ export class CarInsurancePage {
 
     return {
       nextStep: function () {
+        cy.get('#gotoperson').contains('Next').click();
+      },
+      previousStep: function () {
         cy.get('#gotoperson').contains('Next').click();
       }
     }
@@ -36,7 +42,11 @@ export class CarInsurancePage {
     return {
       nextStep: function () {
         cy.get('#gotosummary').contains('Next').click();
+      },
+      previousStep: function () {
+        cy.get('#gotoperson').contains('Next').click();
       }
+
     }
   }
 
