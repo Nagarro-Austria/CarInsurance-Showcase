@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Quote} from "@angular/compiler";
+import {QuoteService} from "../quote.service";
 
 interface InsuranceQuote {
   name: string;
@@ -13,7 +15,7 @@ interface InsuranceQuote {
   coverage: string;
   bonusMaluslevel: string;
   tax: number;
-  premium : number;
+  premium: number;
 }
 
 @Component({
@@ -57,7 +59,7 @@ export class CarInsuranceStepsComponent implements OnInit {
   ];
   quote: InsuranceQuote | null;
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(private _formBuilder: FormBuilder, private quoteServie: QuoteService) {
     this.quote = null;
   }
 
@@ -87,13 +89,21 @@ export class CarInsuranceStepsComponent implements OnInit {
   }
 
   calculate() {
-    this.quote =  {
-      ... this.personDetailsFormGroup.value,
-      ... this.contractDetailsFormGroup.value,
-      ... this.carDetailsFormGroup.value,
-      premium : 123,
-      tax: 10
-    };
-    console.log(this.quote);
+    this.quoteServie
+      .calculateQuote()
+      .subscribe({
+        next: result => this.quote = {
+          ...this.personDetailsFormGroup.value,
+          ...this.contractDetailsFormGroup.value,
+          ...this.carDetailsFormGroup.value,
+          premium: result.premium,
+          tax:  result.tax
+        },
+        error: err => {
+          console.log(err);
+        }
+      });
+
+
   }
 }

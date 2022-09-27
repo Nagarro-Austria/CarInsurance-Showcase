@@ -1,6 +1,7 @@
 package com.craftmanship.insurance.controller;
 
-import com.craftmanship.insurance.model.CarInsuranceInputDTO;
+import com.craftmanship.insurance.model.PremiumRequestDTO;
+import com.craftmanship.insurance.model.PremiumResponseDTO;
 import com.craftmanship.insurance.service.PremiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +18,13 @@ public class PremiumCalculationController {
     private PremiumService liabilityService;
 
     @PostMapping()
-    public BigDecimal calculatePremium(@RequestBody CarInsuranceInputDTO input) {
+    public PremiumResponseDTO calculatePremium(@RequestBody PremiumRequestDTO input) {
 
         BigDecimal result = liabilityService.calculatePremium(input);
 
         if (result == null)
-            return BigDecimal.ZERO;
+            return new PremiumResponseDTO(BigDecimal.ZERO);
 
-        return result;
+        return new PremiumResponseDTO(result);
     }
 }

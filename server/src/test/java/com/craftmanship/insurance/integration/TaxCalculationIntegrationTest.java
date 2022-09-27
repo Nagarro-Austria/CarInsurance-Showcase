@@ -1,21 +1,20 @@
 package com.craftmanship.insurance.integration;
 
 import com.craftmanship.insurance.InsuranceServicesApplication;
-import com.craftmanship.insurance.model.TaxRequest;
-import org.junit.jupiter.api.Test;
+import com.craftmanship.insurance.model.TaxRequestDTO;
+import com.craftmanship.insurance.model.TaxResponseDTO;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -26,23 +25,18 @@ public class TaxCalculationIntegrationTest {
 
     @ParameterizedTest
     @CsvSource({"110, Benzin, 83.60"})
-    public void calculateTax(String power, String fuelType, String expectedPremium) {
+    public void calculateTax(String power, String fuelType, String expectedTax) {
 
-        assertEquals(
-                new BigDecimal(expectedPremium).setScale(2),
-                createRequest(135, Integer.valueOf(power), fuelType, LocalDate.of(2021, 01, 01))
-        );
-    }
+        TaxRequestDTO input = new TaxRequestDTO(135, Integer.valueOf(power), fuelType, LocalDate.of(2021, 01, 01));
 
-    private BigDecimal createRequest(int co2, int kw, String fuel, LocalDate registrationDate) {
-        TaxRequest input = new TaxRequest(co2, kw, fuel, registrationDate);
-
-        return given()
+        var result = given()
                 .contentType("application/json")
                 .body(input)
                 .when()
                 .post(createURLWithPort("/tax"))
-                .as(BigDecimal.class);
+                .as(TaxResponseDTO.class).tax();
+
+        assertThat(result).isEqualTo(new BigDecimal(expectedTax));
     }
 
 

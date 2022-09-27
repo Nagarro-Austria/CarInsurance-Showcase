@@ -1,6 +1,6 @@
 package com.craftmanship.insurance.service;
 
-import com.craftmanship.insurance.model.CarInsuranceInputDTO;
+import com.craftmanship.insurance.model.PremiumRequestDTO;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -32,7 +32,7 @@ class PremiumServiceTest {
             "16, 176.00",
             "17, 176.00"})
     public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
 
         assertThat(new PremiumService().calculatePremium(input)).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -45,7 +45,7 @@ class PremiumServiceTest {
             "147, 132.00",
             "200, 132.00"})
     public void calculatePremiumWithDifferentPowerRanges(int power, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(power, BONUS_MALUS_LEVEL, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(power, BONUS_MALUS_LEVEL, NO_RISK_ZIP_CODE);
 
         assertThat(new PremiumService().calculatePremium(input)).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -58,7 +58,7 @@ class PremiumServiceTest {
             "6667, 92.40",
             "9999, 92.40"})
     public void calculatePremiumWithDifferentRiskLocations(int zipCode, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
 
         assertThat(new PremiumService().calculatePremium(input)).isEqualTo(new BigDecimal(expectedPremium));
     }

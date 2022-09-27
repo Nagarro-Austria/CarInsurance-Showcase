@@ -1,8 +1,8 @@
 package com.craftmanship.insurance.integration;
 
 import com.craftmanship.insurance.InsuranceServicesApplication;
-import com.craftmanship.insurance.model.CarInsuranceInputDTO;
-import com.craftmanship.insurance.service.PremiumService;
+import com.craftmanship.insurance.model.PremiumRequestDTO;
+import com.craftmanship.insurance.model.PremiumResponseDTO;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -44,14 +44,14 @@ public class PremiumCalculationIntegrationTest {
             " 16, 176.00",
             " 17, 176.00"})
     public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
         BigDecimal result =
                 given()
                         .contentType("application/json")
                         .body(input)
                         .when()
                         .post(createURLWithPort("/premium"))
-                        .as(BigDecimal.class);
+                        .as(PremiumResponseDTO.class).premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -64,7 +64,7 @@ public class PremiumCalculationIntegrationTest {
             "147, 132.00",
             "200, 132.00"})
     public void calculatePremiumWithDifferentPowerRanges(int power, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(power, 9, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(power, 9, NO_RISK_ZIP_CODE);
 
         BigDecimal result =
                 given()
@@ -72,7 +72,7 @@ public class PremiumCalculationIntegrationTest {
                         .body(input)
                         .when()
                         .post(createURLWithPort("/premium"))
-                        .as(BigDecimal.class);
+                        .as(PremiumResponseDTO.class).premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -85,7 +85,7 @@ public class PremiumCalculationIntegrationTest {
             "6667, 92.40",
             "9999, 92.40"})
     public void calculatePremiumWithDifferentRiskLocations(int zipCode, String expectedPremium) {
-        CarInsuranceInputDTO input = new CarInsuranceInputDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
 
         BigDecimal result =
                 given()
@@ -93,7 +93,7 @@ public class PremiumCalculationIntegrationTest {
                         .body(input)
                         .when()
                         .post(createURLWithPort("/premium"))
-                        .as(BigDecimal.class);
+                        .as(PremiumResponseDTO.class).premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }

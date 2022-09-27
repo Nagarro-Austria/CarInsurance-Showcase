@@ -1,6 +1,7 @@
 package com.craftmanship.insurance.controller;
 
-import com.craftmanship.insurance.model.TaxRequest;
+import com.craftmanship.insurance.model.TaxRequestDTO;
+import com.craftmanship.insurance.model.TaxResponseDTO;
 import com.craftmanship.insurance.service.TaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +18,13 @@ public class TaxCalculationController {
     private TaxService taxService;
 
     @PostMapping()
-    public BigDecimal calculateInsurance(@RequestBody TaxRequest input) {
+    public TaxResponseDTO calculateTax(@RequestBody TaxRequestDTO input) {
 
         BigDecimal result = taxService.calculateTax(input);
 
         if (result == null)
-            return BigDecimal.ZERO;
+            return new TaxResponseDTO(BigDecimal.ZERO);
 
-        return result;
+        return new TaxResponseDTO(result);
     }
 }

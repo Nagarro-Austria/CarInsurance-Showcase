@@ -1,6 +1,6 @@
 package com.craftmanship.insurance.service;
 
-import com.craftmanship.insurance.model.TaxRequest;
+import com.craftmanship.insurance.model.TaxRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Service
 public class TaxService {
-    public BigDecimal calculateTax(TaxRequest input) {
+    public BigDecimal calculateTax(TaxRequestDTO input) {
         BigDecimal tax = new BigDecimal(0);
         if (input.firstRegistration().isAfter(LocalDate.of(2020, 10, 1))) {
             tax = calculateAfter(input);
@@ -16,7 +16,7 @@ public class TaxService {
         return null;
     }
 
-    private BigDecimal calculateAfter(TaxRequest input) {
+    private BigDecimal calculateAfter(TaxRequestDTO input) {
         return null;
     }
 }

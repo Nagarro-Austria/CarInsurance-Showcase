@@ -1,6 +1,6 @@
 package com.craftmanship.insurance.service;
 
-import com.craftmanship.insurance.model.CarInsuranceInputDTO;
+import com.craftmanship.insurance.model.PremiumRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 @Service
 public class PremiumService {
 
-    public BigDecimal calculatePremium(CarInsuranceInputDTO inputDTO) {
+    public BigDecimal calculatePremium(PremiumRequestDTO inputDTO) {
         BigDecimal premium = calculateBasisPremium(inputDTO.power());
         premium = calculateBonusMalus(premium, inputDTO.bonusMalus());
         premium = calculateZipCodeRisk(premium, inputDTO.zipCode());

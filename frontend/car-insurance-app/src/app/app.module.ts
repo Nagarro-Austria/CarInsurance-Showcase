@@ -12,6 +12,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
 import { CarInsuranceStepsComponent } from './car-insurance-steps/car-insurance-steps.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -21,15 +22,17 @@ import { CarInsuranceStepsComponent } from './car-insurance-steps/car-insurance-
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatStepperModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MatStepperModule,
     MatInputModule,
     MatButtonModule,
     MatListModule,
     MatDatepickerModule,
     MatOptionModule,
     MatSelectModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
