@@ -156,6 +156,30 @@ describe('Create a car insurance quote', () => {
         page.getTax().contains('0.00');
       });
     });
+
+    describe('for different power values', () => {
+      it('for 165 kw', () => {
+        page.carDetails('2020-12-01', 'Gasoline', 215, 165).nextStep();
+        page.contractDetails(startDate, 'Liability', 'Bonus-0').nextStep();
+        page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
+
+        page.getTax().contains('144.00');
+      });
+      it('for 110 kw', () => {
+        page.carDetails('2020-12-01', 'Diesel', 135, 110).nextStep();
+        page.contractDetails(startDate, 'Liability', 'Bonus-1').nextStep();
+        page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
+
+        page.getTax().contains('46.80');
+      });
+      it('for 65 kw', () => {
+        page.carDetails('2020-12-01', 'Gasoline', 115, 65).nextStep();
+        page.contractDetails(startDate, 'Liability', 'Bonus-2').nextStep();
+        page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
+
+        page.getTax().contains('7.20');
+      });
+    });
   });
 
 });
