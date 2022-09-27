@@ -9,7 +9,8 @@
     "test": "ng test",
     "e2e": "ng e2e",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "cypress:record": "cypress run --record --key ba87bb54-edf0-4050-b097-9376ca05b76d"
   },
   "private": true,
   "dependencies": {
