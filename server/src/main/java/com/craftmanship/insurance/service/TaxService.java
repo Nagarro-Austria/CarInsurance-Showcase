@@ -6,17 +6,26 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static java.math.BigDecimal.valueOf;
+
 @Service
 public class TaxService {
+
+    public static final BigDecimal TAX_RATE = valueOf(0.72);
+
     public BigDecimal calculateTax(TaxRequestDTO input) {
-        BigDecimal tax = new BigDecimal(0);
-        if (input.firstRegistration().isAfter(LocalDate.of(2020, 10, 1))) {
-            tax = calculateAfter(input);
+
+        if (input.fuelType().equals("electricity")) {
+            return BigDecimal.ZERO.setScale(2);
         }
-        return null;
+        int co2Param = Math.max(input.co2Emmisions() - 115, 5);
+        if (input.fuelType().equals("hybrid")) {
+            co2Param = 0;
+        }
+
+        int powerParam = Math.max(input.power() - 65, 5);
+
+        return valueOf(co2Param + powerParam).multiply(TAX_RATE);
     }
 
-    private BigDecimal calculateAfter(TaxRequestDTO input) {
-        return null;
-    }
 }
