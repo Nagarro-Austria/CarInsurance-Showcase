@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Quote} from "@angular/compiler";
 import {QuoteService} from "../quote.service";
 
 interface InsuranceQuote {
@@ -13,7 +12,7 @@ interface InsuranceQuote {
   power: number;
   startDate: Date;
   coverage: string;
-  bonusMaluslevel: string;
+  bonusMalusLevel: string;
   tax: number;
   premium: number;
 }
@@ -59,7 +58,7 @@ export class CarInsuranceStepsComponent implements OnInit {
   ];
   quote: InsuranceQuote | null;
 
-  constructor(private _formBuilder: FormBuilder, private quoteServie: QuoteService) {
+  constructor(private _formBuilder: FormBuilder, private quoteService: QuoteService) {
     this.quote = null;
   }
 
@@ -73,7 +72,7 @@ export class CarInsuranceStepsComponent implements OnInit {
     this.contractDetailsFormGroup = this._formBuilder.group({
       startDate: [new Date(), Validators.required],
       coverage: ['', Validators.required],
-      bonusMaluslevel: ['', Validators.required]
+      bonusMalusLevel: ['', Validators.required]
     });
     this.personDetailsFormGroup = this._formBuilder.group({
       name: ['', Validators.required],
@@ -83,27 +82,30 @@ export class CarInsuranceStepsComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.carDetailsFormGroup.value);
-    console.log(this.contractDetailsFormGroup.value);
-    console.log(this.contractDetailsFormGroup.value);
+    console.log(this.quote);
   }
 
   calculate() {
-    this.quoteServie
-      .calculateQuote()
+    this.quoteService
+      .calculateQuote2(this.contractDetailsFormGroup.value.co2Emissions,
+        this.carDetailsFormGroup.value.power,
+        this.carDetailsFormGroup.value.fuelType,
+        this.carDetailsFormGroup.value.firstRegistration,
+        this.contractDetailsFormGroup.value.bonusMalusLevel,
+        this.personDetailsFormGroup.value.zipCode
+      )
       .subscribe({
         next: result => this.quote = {
           ...this.personDetailsFormGroup.value,
           ...this.contractDetailsFormGroup.value,
           ...this.carDetailsFormGroup.value,
           premium: result.premium,
-          tax:  result.tax
+          tax: result.tax
         },
         error: err => {
           console.log(err);
         }
       });
-
-
   }
+
 }

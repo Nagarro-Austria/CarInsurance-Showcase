@@ -19,7 +19,7 @@ export class CarInsurancePage {
   contractDetails(startDate: string, coverage: string, bonusMalusLevel: string) {
     cy.get('#startDate').type(startDate);
     cy.get('#coverage').type(coverage);
-    cy.get('mat-select[formControlName=bonusMaluslevel]').click().get('mat-option').contains(bonusMalusLevel).click();
+    cy.get('mat-select[formControlName=bonusMalusLevel]').click().get('mat-option').contains(bonusMalusLevel).click();
 
     return {
       nextStep: function () {

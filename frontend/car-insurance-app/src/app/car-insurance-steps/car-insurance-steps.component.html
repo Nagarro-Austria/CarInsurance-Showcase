@@ -46,7 +46,7 @@
       </mat-form-field>
       <br/>
       <mat-form-field>
-        <mat-select placeholder="Bonus/Malus Level" formControlName="bonusMaluslevel">
+        <mat-select placeholder="Bonus/Malus Level" formControlName="bonusMalusLevel">
           <mat-option *ngFor="let level of this.bonusMalusTable" [value]="level.value">
             {{ level.viewValue }}
           </mat-option>
@@ -96,11 +96,11 @@
       </div>
       <div class="row">
         <div class="col">Tax</div>
-        <div class="col" id="tax">€ {{this.quote?.tax}}</div>
+        <div class="col" id="tax">€ {{this.quote?.tax | number:'1.2-2'}}</div>
       </div>
       <div class="row">
         <div class="col">Premium</div>
-        <div class="col" id="premium">€ {{this.quote?.premium}}</div>
+        <div class="col" id="premium">€ {{this.quote?.premium| number:'1.2-2'}}</div>
       </div>
     </div>
 
