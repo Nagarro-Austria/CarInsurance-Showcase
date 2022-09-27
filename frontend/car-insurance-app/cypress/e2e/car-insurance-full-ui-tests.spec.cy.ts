@@ -132,14 +132,14 @@ describe('Create a car insurance quote', () => {
         page.contractDetails(startDate, 'Liability', 'Bonus-0').nextStep();
         page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
 
-        page.getTax().contains('28.80');
+        page.getTax().contains('30.96');
       });
       it('for Diesel', () => {
         page.carDetails('2020-12-01', 'Diesel', 123, 100).nextStep();
         page.contractDetails(startDate, 'Liability', 'Bonus-1').nextStep();
         page.personDetails('Mikey Mouse', '1943-11-03', '1230').nextStep();
 
-        page.getTax().contains('28.80');
+        page.getTax().contains('30.96');
       });
       it('for Hybrid', () => {
         page.carDetails('2020-12-01', 'Hybrid', 123, 100).nextStep();
