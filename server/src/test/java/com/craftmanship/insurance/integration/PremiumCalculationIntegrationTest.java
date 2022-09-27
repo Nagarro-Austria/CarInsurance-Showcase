@@ -3,6 +3,7 @@ package com.craftmanship.insurance.integration;
 import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import com.craftmanship.insurance.model.PremiumResponseDTO;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -96,6 +97,25 @@ public class PremiumCalculationIntegrationTest {
                         .as(PremiumResponseDTO.class).premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+            value = {"null, 9, 1000",
+                    "100, null, 1000",
+                    "100, 9, null"},
+            nullValues = {"null"}
+    )
+    public void calculatePremiumWithInvalidParamsShouldReturnPreconditionFailed(Integer power, Integer bonusMalus, Integer zipCode) {
+        PremiumRequestDTO input = new PremiumRequestDTO(power, bonusMalus, zipCode);
+
+        var result = given()
+                .contentType("application/json")
+                .body(input)
+                .when()
+                .post(createURLWithPort("/premium"));
+
+        assertThat(result.statusCode()).isEqualTo(412);
     }
 
     private String createURLWithPort(String uri) {

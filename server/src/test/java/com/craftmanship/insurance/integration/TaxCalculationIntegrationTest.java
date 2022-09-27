@@ -3,7 +3,6 @@ package com.craftmanship.insurance.integration;
 import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.TaxRequestDTO;
 import com.craftmanship.insurance.model.TaxResponseDTO;
-import com.craftmanship.insurance.service.TaxService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,6 +77,37 @@ public class TaxCalculationIntegrationTest {
         return result;
     }
 
+    @ParameterizedTest
+    @CsvSource(
+            value = {"null, 100, hybrid",
+                    "100, null, hybrid",
+                    "100, 100, null"},
+            nullValues = {"null"}
+    )
+    public void calculateTaxWithInvalidParamsShouldReturnPreconditionFailed(Integer co2Emissions, Integer power, String fuelType) {
+        TaxRequestDTO input = new TaxRequestDTO(co2Emissions, power, fuelType, LocalDate.now());
+
+        var result = given()
+                .contentType("application/json")
+                .body(input)
+                .when()
+                .post(createURLWithPort("/tax"));
+
+        assertThat(result.statusCode()).isEqualTo(412);
+    }
+
+    @Test
+    public void calculateTaxWithInvalidFuelTypeShouldReturnPreconditionFailed() {
+        TaxRequestDTO input = new TaxRequestDTO(100, 100, "abc", LocalDate.now());
+
+        var result = given()
+                .contentType("application/json")
+                .body(input)
+                .when()
+                .post(createURLWithPort("/tax"));
+
+        assertThat(result.statusCode()).isEqualTo(412);
+    }
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
     }

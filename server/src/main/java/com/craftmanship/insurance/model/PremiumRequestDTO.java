@@ -1,4 +1,4 @@
 package com.craftmanship.insurance.model;
 
-public record PremiumRequestDTO(int power, int bonusMalus, int zipCode) {
+public record PremiumRequestDTO(Integer power, Integer bonusMalus, Integer zipCode) {
 }
