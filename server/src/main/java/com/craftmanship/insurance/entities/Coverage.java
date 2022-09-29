@@ -3,6 +3,7 @@ package com.craftmanship.insurance.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -12,9 +13,10 @@ public class Coverage {
     @GeneratedValue
     Long id;
 
-    @Column(name = "VALID_FROM", nullable = true)
-    private LocalDate validFrom;
-
+    @Column(name = "VALID_FROM", nullable = false)
+    private Date validFrom;
+    @Column(name = "VALID_TO", nullable = false)
+    private Date validTo;
     @Column(name = "MIN_PREMIUM", nullable = false)
     private BigDecimal minPremium;
     @Column(name = "MAX_PREMIUM", nullable = false)
@@ -32,12 +34,20 @@ public class Coverage {
         this.id = id;
     }
 
-    public LocalDate getValidFrom() {
+    public Date getValidFrom() {
         return validFrom;
     }
 
-    public void setValidFrom(LocalDate validFrom) {
+    public void setValidFrom(Date validFrom) {
         this.validFrom = validFrom;
+    }
+
+    public Date getValidTo() {
+        return validTo;
+    }
+
+    public void setValidTo(Date validTo) {
+        this.validTo = validTo;
     }
 
     public BigDecimal getMinPremium() {
@@ -71,4 +81,5 @@ public class Coverage {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

@@ -1,13 +1,21 @@
 package com.craftmanship.insurance.service;
 
+import com.craftmanship.insurance.entities.Coverage;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
+import com.craftmanship.insurance.repositories.CoverageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class PremiumService {
+    @Autowired
+    private CoverageRepository coverageRepository;
 
     public BigDecimal calculatePremium(PremiumRequestDTO inputDTO) {
         BigDecimal premium = calculateBasisPremium(inputDTO.power());
@@ -34,12 +42,24 @@ public class PremiumService {
     }
 
     private BigDecimal calculateBasisPremium(int kilowatt) {
+        Coverage coverage = getValidCoverage();
         if (kilowatt < 27) {
-            return BigDecimal.valueOf(23.76);
+            return coverage.getMinPremium();
         } else if (kilowatt > 146) {
-            return BigDecimal.valueOf(132);
+            return coverage.getMaxPremium();
         }
-        return BigDecimal.valueOf(kilowatt * 0.88);
+        return coverage.getPercentagePremium().multiply(BigDecimal.valueOf(kilowatt));
+    }
+
+    private Coverage getValidCoverage() {
+        Collection<Coverage> allCoverages = coverageRepository.findAllCoverages();
+        java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+        for (Coverage coverage : allCoverages){
+            if (coverage.getValidFrom().before(today) && coverage.getValidTo().after(today)){
+                return coverage;
+            }
+        }
+        throw new IllegalArgumentException("No Coverage found");
     }
 
     private int calculateBonusMalus(int stufe) {
