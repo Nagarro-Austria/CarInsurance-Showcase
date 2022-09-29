@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {QuoteData} from "./model/quote-data";
+import {QuoteData} from "../model/quote-data";
 import {forkJoin, map, Observable} from "rxjs";
 
 
@@ -19,6 +19,7 @@ interface PremiumRequest {
   power: number;
   bonusMalus: number;
   zipCode: number;
+  coverageId?: number;
 }
 
 interface PremiumResponse {
@@ -46,9 +47,10 @@ export class QuoteService {
                         fuelType: string,
                         firstRegistration: Date,
                         bonusMalus: number,
-                        zipCode: number): Observable<QuoteData> {
+                        zipCode: number,
+                        coverageId?: number): Observable<QuoteData> {
 
-    const premiumRequest: PremiumRequest = {power: power, bonusMalus: bonusMalus, zipCode: zipCode};
+    const premiumRequest: PremiumRequest = {power: power, bonusMalus: bonusMalus, zipCode: zipCode, coverageId: coverageId};
     let premium = this.http.post<PremiumResponse>(this.premiumURL, premiumRequest, httpOptions);
 
     const taxRequest: TaxRequest = {
