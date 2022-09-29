@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Optional;
 
 @Service
 public class PremiumService {
@@ -52,14 +49,11 @@ public class PremiumService {
     }
 
     private Coverage getValidCoverage() {
-        Collection<Coverage> allCoverages = coverageRepository.findAllCoverages();
-        java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTime().getTime());
-        for (Coverage coverage : allCoverages){
-            if (coverage.getValidFrom().before(today) && coverage.getValidTo().after(today)){
-                return coverage;
-            }
+        Coverage coverage = coverageRepository.findValidCoverage();
+        if (coverage == null) {
+            throw new IllegalArgumentException("No Coverage found");
         }
-        throw new IllegalArgumentException("No Coverage found");
+        return coverage;
     }
 
     private int calculateBonusMalus(int stufe) {

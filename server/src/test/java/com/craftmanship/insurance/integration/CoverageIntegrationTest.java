@@ -1,7 +1,13 @@
 package com.craftmanship.insurance.integration;
 
+import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.CoverageResponseDTO;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,16 +21,16 @@ public class CoverageIntegrationTest {
     @Test
     public void shouldReadOnlyValidCoverageRessources() {
 
-        List<CoverageResponseDTO> result = given()
+        CoverageResponseDTO result = given()
                 .contentType("application/json")
                 .when()
                 .get(createURLWithPort("/coverage"))
                 .then()
                 .extract()
                 .body()
-                .jsonPath().getList(".", CoverageResponseDTO.class);
+                .as(CoverageResponseDTO.class);
 
-        assertThat(result).allMatch(coverage -> coverage.validFrom() > LocalDate.now().getYear());
+        Assertions.assertThat(result.validFrom().getYear() >= LocalDate.now().getYear()).isTrue();
     }
 
     private String createURLWithPort(String uri) {

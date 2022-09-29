@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "COVERAGE")
@@ -24,7 +23,7 @@ public class Coverage {
     @Column(name = "PERCENTAGE_PREMIUM", nullable = false)
     private BigDecimal percentagePremium;
     @Column(name = "DESCRIPTION", nullable = false)
-    private String description ;
+    private String description;
 
     public Long getId() {
         return id;
