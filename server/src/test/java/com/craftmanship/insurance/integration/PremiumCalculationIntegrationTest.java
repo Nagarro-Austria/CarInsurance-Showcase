@@ -1,30 +1,24 @@
 package com.craftmanship.insurance.integration;
 
-import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import com.craftmanship.insurance.model.PremiumResponseDTO;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PremiumCalculationIntegrationTest {
     public static final int NO_RISK_ZIP_CODE = 4000;
     public static final int STANDARD_POWER = 100;
     public static final int BONUS_MALUS_LEVEL = 9;
-    @LocalServerPort
-    private int port;
+    //@LocalServerPort
+    private int port = 8080;
 
     @ParameterizedTest
     @CsvSource({" 0, 44.00",
@@ -97,6 +91,20 @@ public class PremiumCalculationIntegrationTest {
                         .as(PremiumResponseDTO.class).premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
+    }
+
+    @Test
+    public void calculatePremiumWithValidContract() {
+        PremiumRequestDTO input = new PremiumRequestDTO(100, 9, 4000);
+
+        var result = given()
+                .contentType("application/json")
+                .body(input)
+                .when()
+                .post(createURLWithPort("/premium"))
+                .as(PremiumResponseDTO.class).premium();
+
+        assertThat(result).isEqualTo(new BigDecimal("88.00"));
     }
 
     @ParameterizedTest

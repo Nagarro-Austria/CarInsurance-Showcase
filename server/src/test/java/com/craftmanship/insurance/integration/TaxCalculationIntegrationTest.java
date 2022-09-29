@@ -3,6 +3,7 @@ package com.craftmanship.insurance.integration;
 import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.TaxRequestDTO;
 import com.craftmanship.insurance.model.TaxResponseDTO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,11 +20,11 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TaxCalculationIntegrationTest {
     @LocalServerPort
-    private int port;
+    private int port = 8080;
 
     @Test
     public void calculateTaxForElectric() {
@@ -77,6 +78,14 @@ public class TaxCalculationIntegrationTest {
         return result;
     }
 
+    @Test
+    public void calculateTaxWithValidContract() {
+
+        TaxRequestDTO input = new TaxRequestDTO(100, 100, "diesel", LocalDate.of(2022, 4, 21));
+
+        assertThat(callService(input)).isEqualTo(new BigDecimal("28.80"));
+    }
+
     @ParameterizedTest
     @CsvSource(
             value = {"null, 100, hybrid",
@@ -108,6 +117,7 @@ public class TaxCalculationIntegrationTest {
 
         assertThat(result.statusCode()).isEqualTo(412);
     }
+
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
     }
