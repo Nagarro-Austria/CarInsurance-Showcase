@@ -11,13 +11,10 @@ import java.math.BigDecimal;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PremiumCalculationIntegrationTest {
     public static final int NO_RISK_ZIP_CODE = 4000;
     public static final int STANDARD_POWER = 100;
     public static final int BONUS_MALUS_LEVEL = 9;
-    //@LocalServerPort
     private int port = 8080;
 
     @ParameterizedTest
