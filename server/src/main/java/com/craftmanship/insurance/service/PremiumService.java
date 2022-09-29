@@ -33,7 +33,7 @@ public class PremiumService {
                 .multiply(BigDecimal.valueOf(calculateBonusMalus(bonusMalus)));
     }
 
-    private BigDecimal calculateBasisPremium( int kilowatt) {
+    private BigDecimal calculateBasisPremium(int kilowatt) {
         if (kilowatt < 27) {
             return BigDecimal.valueOf(23.76);
         } else if (kilowatt > 146) {
@@ -42,7 +42,7 @@ public class PremiumService {
         return BigDecimal.valueOf(kilowatt * 0.88);
     }
 
-    private int calculateBonusMalus(int stufe){
+    private int calculateBonusMalus(int stufe) {
         return switch (stufe) {
             case 0, 1 -> 50;
             case 2, 3 -> 60;
