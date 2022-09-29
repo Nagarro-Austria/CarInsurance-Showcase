@@ -1,4 +1,4 @@
-package com.craftmanship.insurance.integration;
+package com.craftmanship.insurance.integration.logictests;
 
 import com.craftmanship.insurance.model.CoverageResponseDTO;
 import org.junit.jupiter.api.Test;

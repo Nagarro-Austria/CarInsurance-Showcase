@@ -1,4 +1,4 @@
-package com.craftmanship.insurance.integration;
+package com.craftmanship.insurance.integration.logictests;
 
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import com.craftmanship.insurance.model.PremiumResponseDTO;
