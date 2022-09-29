@@ -2,6 +2,7 @@ package com.craftmanship.insurance.controller;
 
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import com.craftmanship.insurance.model.PremiumResponseDTO;
+import com.craftmanship.insurance.repositories.CoverageRepository;
 import com.craftmanship.insurance.service.PremiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
