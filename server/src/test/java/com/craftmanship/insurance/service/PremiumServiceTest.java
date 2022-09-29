@@ -1,5 +1,6 @@
 package com.craftmanship.insurance.service;
 
+import com.craftmanship.insurance.entities.Coverage;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -32,9 +33,14 @@ class PremiumServiceTest {
             "16, 176.00",
             "17, 176.00"})
     public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE,1L);
 
-        assertThat(new PremiumService().calculatePremium(input)).isEqualTo(new BigDecimal(expectedPremium));
+        Coverage coverage = new Coverage();
+        coverage.setPercentagePremium(new BigDecimal("0.88"));
+        coverage.setMaxPremium(new BigDecimal("132"));
+        coverage.setMinPremium(new BigDecimal("23.76"));
+
+        assertThat(new PremiumService().calculatePremium(input, coverage)).isEqualTo(new BigDecimal(expectedPremium));
     }
 
     @ParameterizedTest
@@ -45,9 +51,13 @@ class PremiumServiceTest {
             "147, 132.00",
             "200, 132.00"})
     public void calculatePremiumWithDifferentPowerRanges(int power, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(power, BONUS_MALUS_LEVEL, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(power, BONUS_MALUS_LEVEL, NO_RISK_ZIP_CODE,1L);
 
-        assertThat(new PremiumService().calculatePremium(input)).isEqualTo(new BigDecimal(expectedPremium));
+        Coverage coverage = new Coverage();
+        coverage.setPercentagePremium(new BigDecimal("0.88"));
+        coverage.setMaxPremium(new BigDecimal("132"));
+        coverage.setMinPremium(new BigDecimal("23.76"));
+        assertThat(new PremiumService().calculatePremium(input, coverage)).isEqualTo(new BigDecimal(expectedPremium));
     }
 
     @ParameterizedTest
@@ -58,8 +68,11 @@ class PremiumServiceTest {
             "6667, 92.40",
             "9999, 92.40"})
     public void calculatePremiumWithDifferentRiskLocations(int zipCode, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
-
-        assertThat(new PremiumService().calculatePremium(input)).isEqualTo(new BigDecimal(expectedPremium));
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode,1L);
+        Coverage coverage = new Coverage();
+        coverage.setPercentagePremium(new BigDecimal("0.88"));
+        coverage.setMaxPremium(new BigDecimal("132"));
+        coverage.setMinPremium(new BigDecimal("23.76"));
+        assertThat(new PremiumService().calculatePremium(input, coverage)).isEqualTo(new BigDecimal(expectedPremium));
     }
 }

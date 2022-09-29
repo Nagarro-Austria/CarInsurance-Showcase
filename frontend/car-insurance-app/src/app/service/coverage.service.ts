@@ -13,12 +13,6 @@ export class CoverageService {
   }
 
   public readOptions(): Observable<Coverage[]> {
-    /*
-    return this.http.get(this.coverageURL);
-     */
-    return of([
-      {id: 1, description: "motor vehicle liability 2022", validFrom: 2022},
-      {id: 2, description: "motor vehicle liability 2023", validFrom: 2023}
-    ]);
+    return this.http.get<Coverage[]>(this.coverageURL);
   }
 }

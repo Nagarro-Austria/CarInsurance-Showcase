@@ -1,12 +1,14 @@
 package com.craftmanship.insurance.controller;
 
-import com.craftmanship.insurance.entities.Coverage;
 import com.craftmanship.insurance.model.CoverageResponseDTO;
 import com.craftmanship.insurance.repositories.CoverageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -16,13 +18,13 @@ public class CoverageController {
     private CoverageRepository coverageRepository;
 
     @GetMapping()
-    public CoverageResponseDTO findValidCoverage() {
+    public List<CoverageResponseDTO> findValidCoverage() {
 
-        Coverage result = coverageRepository.findValidCoverage();
+        List<CoverageResponseDTO> result = coverageRepository.findAll().stream()
+                .filter(coverage -> LocalDate.now().getYear() <= coverage.getValidTo().toLocalDate().getYear())
+                .map(coverage -> new CoverageResponseDTO(coverage.getId(), coverage.getValidFrom().toLocalDate(), coverage.getDescription()))
+                .toList();
 
-        if (result == null)
-            return null;
-
-        return new CoverageResponseDTO(result.getId(), result.getValidFrom().toLocalDate(), result.getDescription() );
+        return result;
     }
 }

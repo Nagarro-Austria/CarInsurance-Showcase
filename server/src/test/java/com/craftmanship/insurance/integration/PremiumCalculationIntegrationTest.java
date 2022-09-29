@@ -36,7 +36,7 @@ public class PremiumCalculationIntegrationTest {
             " 16, 176.00",
             " 17, 176.00"})
     public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE,3L);
         BigDecimal result =
                 given()
                         .contentType("application/json")
@@ -56,7 +56,7 @@ public class PremiumCalculationIntegrationTest {
             "147, 132.00",
             "200, 132.00"})
     public void calculatePremiumWithDifferentPowerRanges(int power, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(power, 9, NO_RISK_ZIP_CODE);
+        PremiumRequestDTO input = new PremiumRequestDTO(power, 9, NO_RISK_ZIP_CODE,3L);
 
         BigDecimal result =
                 given()
@@ -77,7 +77,7 @@ public class PremiumCalculationIntegrationTest {
             "6667, 92.40",
             "9999, 92.40"})
     public void calculatePremiumWithDifferentRiskLocations(int zipCode, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode,3L);
 
         BigDecimal result =
                 given()
@@ -92,7 +92,7 @@ public class PremiumCalculationIntegrationTest {
 
     @Test
     public void calculatePremiumWithValidContract() {
-        PremiumRequestDTO input = new PremiumRequestDTO(100, 9, 4000);
+        PremiumRequestDTO input = new PremiumRequestDTO(100, 9, 4000,3L);
 
         var result = given()
                 .contentType("application/json")
@@ -112,7 +112,7 @@ public class PremiumCalculationIntegrationTest {
             nullValues = {"null"}
     )
     public void calculatePremiumWithInvalidParamsShouldReturnPreconditionFailed(Integer power, Integer bonusMalus, Integer zipCode) {
-        PremiumRequestDTO input = new PremiumRequestDTO(power, bonusMalus, zipCode);
+        PremiumRequestDTO input = new PremiumRequestDTO(power, bonusMalus, zipCode,3L);
 
         var result = given()
                 .contentType("application/json")

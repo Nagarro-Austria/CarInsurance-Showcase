@@ -2,8 +2,6 @@ package com.craftmanship.insurance.service;
 
 import com.craftmanship.insurance.entities.Coverage;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
-import com.craftmanship.insurance.repositories.CoverageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,11 +9,9 @@ import java.math.RoundingMode;
 
 @Service
 public class PremiumService {
-    @Autowired
-    private CoverageRepository coverageRepository;
 
-    public BigDecimal calculatePremium(PremiumRequestDTO inputDTO) {
-        BigDecimal premium = calculateBasisPremium(inputDTO.power());
+    public BigDecimal calculatePremium(PremiumRequestDTO inputDTO, Coverage coverage) {
+        BigDecimal premium = calculateBasisPremium(inputDTO.power(), coverage);
         premium = calculateBonusMalus(premium, inputDTO.bonusMalus());
         premium = calculateZipCodeRisk(premium, inputDTO.zipCode());
 
@@ -38,8 +34,7 @@ public class PremiumService {
                 .multiply(BigDecimal.valueOf(calculateBonusMalus(bonusMalus)));
     }
 
-    private BigDecimal calculateBasisPremium(int kilowatt) {
-        Coverage coverage = getValidCoverage();
+    private BigDecimal calculateBasisPremium(int kilowatt, Coverage coverage) {
         if (kilowatt < 27) {
             return coverage.getMinPremium();
         } else if (kilowatt > 146) {
@@ -48,13 +43,6 @@ public class PremiumService {
         return coverage.getPercentagePremium().multiply(BigDecimal.valueOf(kilowatt));
     }
 
-    private Coverage getValidCoverage() {
-        Coverage coverage = coverageRepository.findValidCoverage();
-        if (coverage == null) {
-            throw new IllegalArgumentException("No Coverage found");
-        }
-        return coverage;
-    }
 
     private int calculateBonusMalus(int stufe) {
         return switch (stufe) {
