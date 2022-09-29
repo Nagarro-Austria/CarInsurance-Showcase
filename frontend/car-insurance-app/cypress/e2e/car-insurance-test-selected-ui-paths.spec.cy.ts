@@ -18,7 +18,6 @@ describe('Create a car insurance quote', () => {
       page.getPremium().contains('277.20');
     });
   });
-
   describe('with other navigation paths', () => {
     it('adapting the power after finishing', () => {
       let carDetailComponent = page.carDetails('2020-12-01', 'Gasoline', 123, 147);
@@ -45,7 +44,6 @@ describe('Create a car insurance quote', () => {
       page.getTax().contains('30.96');
       page.getPremium().contains('184.80');
     });
-
     it('reseting all inputs after finishing', () => {
       let carDetailComponent = page.carDetails('2020-12-01', 'Gasoline', 123, 147);
       carDetailComponent.nextStep();
@@ -63,6 +61,5 @@ describe('Create a car insurance quote', () => {
       cy.get('#power').should('have.text', '');
     });
   });
-
 
 });

@@ -156,7 +156,6 @@ describe('Create a car insurance quote', () => {
         page.getTax().contains('0.00');
       });
     });
-
     describe('for different power values', () => {
       it('for 165 kw', () => {
         page.carDetails('2020-12-01', 'Gasoline', 215, 165).nextStep();

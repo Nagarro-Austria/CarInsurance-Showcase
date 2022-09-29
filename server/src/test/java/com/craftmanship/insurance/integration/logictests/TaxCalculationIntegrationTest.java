@@ -15,6 +15,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TaxCalculationIntegrationTest {
     private int port = 8080;
 
+    private String createURLWithPort(String uri) {
+        return "http://localhost:" + port + uri;
+    }
+
+    private BigDecimal callService(TaxRequestDTO input) {
+        var result = given()
+                .contentType("application/json")
+                .body(input)
+                .when()
+                .post(createURLWithPort("/tax"))
+                .as(TaxResponseDTO.class).tax();
+
+        return result;
+    }
     @Test
     public void calculateTaxForElectric() {
 
@@ -55,19 +69,7 @@ public class TaxCalculationIntegrationTest {
 
         assertThat(callService(input)).isEqualTo(new BigDecimal(expectedTax));
     }
-
-    private BigDecimal callService(TaxRequestDTO input) {
-        var result = given()
-                .contentType("application/json")
-                .body(input)
-                .when()
-                .post(createURLWithPort("/tax"))
-                .as(TaxResponseDTO.class).tax();
-
-        return result;
-    }
-
-    @Test
+        @Test
     public void calculateTaxWithValidContract() {
 
         TaxRequestDTO input = new TaxRequestDTO(100, 100, "diesel", LocalDate.of(2022, 4, 21));
@@ -107,7 +109,4 @@ public class TaxCalculationIntegrationTest {
         assertThat(result.statusCode()).isEqualTo(412);
     }
 
-    private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
-    }
 }
