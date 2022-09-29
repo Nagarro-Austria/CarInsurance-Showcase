@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {QuoteService} from "../quote.service";
+import {QuoteService} from "../service/quote.service";
+import {CoverageService} from "../service/coverage.service";
+import {Coverage} from "../model/coverage";
 
 interface InsuranceQuote {
   name: string;
@@ -56,13 +58,22 @@ export class CarInsuranceStepsComponent implements OnInit {
     {value: '16', viewValue: 'Malus-16'},
     {value: '17', viewValue: 'Malus-17'}
   ];
+  coverageTable: Coverage[];
   quote: InsuranceQuote | null;
 
-  constructor(private _formBuilder: FormBuilder, private quoteService: QuoteService) {
+  constructor(private _formBuilder: FormBuilder, private quoteService: QuoteService, private coverageService: CoverageService) {
     this.quote = null;
+    this.coverageTable = [];
   }
 
   ngOnInit() {
+
+    this.coverageService.readOptions()
+      .subscribe({
+        next: value => this.coverageTable = value,
+        error: err => console.log(err)
+      })
+
     this.carDetailsFormGroup = this._formBuilder.group({
       firstRegistration: ['', Validators.required],
       fuelType: ['', Validators.required],
@@ -92,7 +103,8 @@ export class CarInsuranceStepsComponent implements OnInit {
         this.carDetailsFormGroup.value.fuelType,
         this.carDetailsFormGroup.value.firstRegistration,
         this.contractDetailsFormGroup.value.bonusMalusLevel,
-        this.personDetailsFormGroup.value.zipCode
+        this.personDetailsFormGroup.value.zipCode,
+        this.contractDetailsFormGroup.value.coverage,
       )
       .subscribe({
         next: result => this.quote = {

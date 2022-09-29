@@ -2,6 +2,7 @@ package com.craftmanship.insurance.controller;
 
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import com.craftmanship.insurance.model.PremiumResponseDTO;
+import com.craftmanship.insurance.repositories.CoverageRepository;
 import com.craftmanship.insurance.service.PremiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,20 +16,23 @@ import java.math.BigDecimal;
 @RequestMapping("/premium")
 public class PremiumCalculationController {
     @Autowired
-    private PremiumService liabilityService;
+    private PremiumService premiumService;
+    @Autowired
+    private CoverageRepository coverageRepository;
 
     @PostMapping()
     public PremiumResponseDTO calculatePremium(@RequestBody PremiumRequestDTO input) {
 
-        if (input.bonusMalus() == null || input.power() == null || input.zipCode() == null) {
+        if (input.bonusMalus() == null || input.power() == null || input.zipCode() == null || input.coverageId() == null) {
             throw new InsuranceValidationException("All parameters for premium calculation are mandatory");
         }
 
-        BigDecimal result = liabilityService.calculatePremium(input);
+        BigDecimal result = premiumService.calculatePremium(input, coverageRepository.getReferenceById(input.coverageId()));
 
         if (result == null)
             return new PremiumResponseDTO(BigDecimal.ZERO);
 
         return new PremiumResponseDTO(result);
     }
+
 }

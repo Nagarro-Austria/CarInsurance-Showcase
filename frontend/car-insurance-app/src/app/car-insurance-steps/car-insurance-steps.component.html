@@ -41,8 +41,11 @@
       </mat-form-field>
       <br/>
       <mat-form-field>
-        <mat-label>Coverage</mat-label>
-        <input matInput placeholder="Coverage" formControlName="coverage" id="coverage" required>
+        <mat-select placeholder="Coverage" formControlName="coverage">
+          <mat-option *ngFor="let level of this.coverageTable" [value]="level.id">
+            {{ level.description }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
       <br/>
       <mat-form-field>

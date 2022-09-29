@@ -1,5 +1,6 @@
 package com.craftmanship.insurance.service;
 
+import com.craftmanship.insurance.entities.Coverage;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +10,8 @@ import java.math.RoundingMode;
 @Service
 public class PremiumService {
 
-    public BigDecimal calculatePremium(PremiumRequestDTO inputDTO) {
-        BigDecimal premium = calculateBasisPremium(inputDTO.power());
+    public BigDecimal calculatePremium(PremiumRequestDTO inputDTO, Coverage coverage) {
+        BigDecimal premium = calculateBasisPremium(inputDTO.power(), coverage);
         premium = calculateBonusMalus(premium, inputDTO.bonusMalus());
         premium = calculateZipCodeRisk(premium, inputDTO.zipCode());
 
@@ -33,16 +34,17 @@ public class PremiumService {
                 .multiply(BigDecimal.valueOf(calculateBonusMalus(bonusMalus)));
     }
 
-    private BigDecimal calculateBasisPremium( int kilowatt) {
+    private BigDecimal calculateBasisPremium(int kilowatt, Coverage coverage) {
         if (kilowatt < 27) {
-            return BigDecimal.valueOf(23.76);
+            return coverage.getMinPremium();
         } else if (kilowatt > 146) {
-            return BigDecimal.valueOf(132);
+            return coverage.getMaxPremium();
         }
-        return BigDecimal.valueOf(kilowatt * 0.88);
+        return coverage.getPercentagePremium().multiply(BigDecimal.valueOf(kilowatt));
     }
 
-    private int calculateBonusMalus(int stufe){
+
+    private int calculateBonusMalus(int stufe) {
         return switch (stufe) {
             case 0, 1 -> 50;
             case 2, 3 -> 60;
