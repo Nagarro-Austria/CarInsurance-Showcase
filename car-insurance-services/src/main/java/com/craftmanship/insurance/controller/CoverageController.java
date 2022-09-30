@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -23,7 +24,7 @@ public class CoverageController {
         List<CoverageResponseDTO> result = coverageRepository.findAll().stream()
                 .filter(coverage -> LocalDate.now().getYear() <= coverage.getValidTo().toLocalDate().getYear())
                 .map(coverage -> new CoverageResponseDTO(coverage.getId(), coverage.getValidFrom().toLocalDate(), coverage.getDescription()))
-                .toList();
+                .collect(Collectors.toList());
 
         return result;
     }

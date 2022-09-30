@@ -21,7 +21,7 @@ public class TaxCalculationIntegrationTest {
                 .body(input)
                 .when()
                 .post(createURLWithPort("/tax"))
-                .as(TaxResponseDTO.class).tax();
+                .as(TaxResponseDTO.class).getTax();
 
         return result;
     }

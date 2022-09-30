@@ -24,7 +24,7 @@ public class CoverageIntegrationTest {
                 .body()
                 .jsonPath().getList(".", CoverageResponseDTO.class);
 
-        assertThat(result).allMatch(coverage -> coverage.validFrom().getYear() >= LocalDate.now().getYear());
+        assertThat(result).allMatch(coverage -> coverage.getValidFrom().getYear() >= LocalDate.now().getYear());
     }
 
     private String createURLWithPort(String uri) {

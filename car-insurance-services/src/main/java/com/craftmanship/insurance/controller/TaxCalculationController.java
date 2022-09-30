@@ -25,12 +25,12 @@ public class TaxCalculationController {
     @PostMapping()
     public TaxResponseDTO calculateTax(@RequestBody TaxRequestDTO input) {
 
-        if (input.fuelType() == null || input.power() == null || input.co2Emissions() == null || input.firstRegistration() == null) {
+        if (input.getFuelType() == null || input.getPower() == null || input.getCo2Emissions() == null || input.getFirstRegistration() == null) {
             throw new InsuranceValidationException("All parameters for tax calculation are mandatory");
         }
 
-        if (!VALID_FUEL_TYPES.contains(input.fuelType())) {
-            throw new InsuranceValidationException("Parameter fuel type '" + input.fuelType() +"' is invalid");
+        if (!VALID_FUEL_TYPES.contains(input.getFuelType())) {
+            throw new InsuranceValidationException("Parameter fuel type '" + input.getFuelType() +"' is invalid");
         }
 
         BigDecimal result = taxService.calculateTax(input);

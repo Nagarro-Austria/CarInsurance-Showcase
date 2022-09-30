@@ -43,7 +43,7 @@ public class PremiumCalculationIntegrationTest {
                         .body(input)
                         .when()
                         .post(createURLWithPort("/premium"))
-                        .as(PremiumResponseDTO.class).premium();
+                        .as(PremiumResponseDTO.class).getPremium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -64,7 +64,7 @@ public class PremiumCalculationIntegrationTest {
                         .body(input)
                         .when()
                         .post(createURLWithPort("/premium"))
-                        .as(PremiumResponseDTO.class).premium();
+                        .as(PremiumResponseDTO.class).getPremium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -85,7 +85,7 @@ public class PremiumCalculationIntegrationTest {
                         .body(input)
                         .when()
                         .post(createURLWithPort("/premium"))
-                        .as(PremiumResponseDTO.class).premium();
+                        .as(PremiumResponseDTO.class).getPremium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -99,7 +99,7 @@ public class PremiumCalculationIntegrationTest {
                 .body(input)
                 .when()
                 .post(createURLWithPort("/premium"))
-                .as(PremiumResponseDTO.class).premium();
+                .as(PremiumResponseDTO.class).getPremium();
 
         assertThat(result).isEqualTo(new BigDecimal("88.00"));
     }

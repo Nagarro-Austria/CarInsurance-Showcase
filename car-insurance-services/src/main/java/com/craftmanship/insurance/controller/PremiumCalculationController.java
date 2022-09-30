@@ -23,11 +23,11 @@ public class PremiumCalculationController {
     @PostMapping()
     public PremiumResponseDTO calculatePremium(@RequestBody PremiumRequestDTO input) {
 
-        if (input.bonusMalus() == null || input.power() == null || input.zipCode() == null || input.coverageId() == null) {
+        if (input.getBonusMalus() == null || input.getPower() == null || input.getZipCode() == null || input.getCoverageId() == null) {
             throw new InsuranceValidationException("All parameters for premium calculation are mandatory");
         }
 
-        BigDecimal result = premiumService.calculatePremium(input, coverageRepository.getReferenceById(input.coverageId()));
+        BigDecimal result = premiumService.calculatePremium(input, coverageRepository.getReferenceById(input.getCoverageId()));
 
         if (result == null)
             return new PremiumResponseDTO(BigDecimal.ZERO);
