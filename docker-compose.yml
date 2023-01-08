@@ -18,6 +18,17 @@ services:
       - '8080:8080'
     #networks:
     #  - frontend
-
+  
+  # Database Service (Mysql)
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: demo
+      MYSQL_USER: javachinna
+      MYSQL_PASSWORD: javachinna
+      MYSQL_ROOT_PASSWORD: root
 #networks:
 #  frontend:
