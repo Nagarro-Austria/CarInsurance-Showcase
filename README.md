@@ -12,3 +12,24 @@ The UI is implemented with the Angular framework and there are a lot of UI test 
 ## Service Layer
 The service layer is implemented with the Spring framework and there no tests at all. The server code is located in the folder 'car-insurance-app'. For detailed instructions read the README.md there.
 
+### Todos
+- Nginx
+- docker 
+  - naming
+  - ports
+  - ignore files
+- improve server / ui naming
+- cypress with docker?
+- docs
+
+## Docker
+
+### docker compose
+
+Use docker compose building the server and the client docker images at once
+`docker compose up -d --build`
+
+Running the Cypress test 
+
+
+`docker-compose stop`
