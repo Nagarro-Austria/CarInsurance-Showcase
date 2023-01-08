@@ -26,9 +26,9 @@ services:
       - "3306:3306"
     restart: always
     environment:
-      MYSQL_DATABASE: demo
-      MYSQL_USER: javachinna
-      MYSQL_PASSWORD: javachinna
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: car_insurance
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
+      MYSQL_ROOT_PASSWORD:
 #networks:
 #  frontend:
