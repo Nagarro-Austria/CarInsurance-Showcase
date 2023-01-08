@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  car-insurance-app:
+    container_name: car-insurance-app
+    build:
+      context: car-insurance-app
+      dockerfile: Dockerfile
+    ports:
+      - '4200:4200'
+
+  car-insurance-services:
+    container_name: car-insurance-services
+    build:
+      context: car-insurance-services
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    #networks:
+    #  - frontend
+
+#networks:
+#  frontend:
