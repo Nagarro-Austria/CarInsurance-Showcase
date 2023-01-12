@@ -16,3 +16,6 @@
 * Right Click on the file and Run as Java Application
 
 You are all set
+
+### Start docker
+* docker compose up
