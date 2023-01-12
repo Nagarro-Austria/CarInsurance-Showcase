@@ -1,15 +1,28 @@
 package com.craftmanship.insurance.service;
 
+import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.entities.Coverage;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PremiumServiceTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+
     public static final int NO_RISK_ZIP_CODE = 4000;
     public static final int STANDARD_POWER = 100;
     public static final int BONUS_MALUS_LEVEL = 9;
@@ -33,7 +46,7 @@ class PremiumServiceTest {
             "16, 176.00",
             "17, 176.00"})
     public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE,1L);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE, 1L);
 
         Coverage coverage = new Coverage();
         coverage.setPercentagePremium(new BigDecimal("0.88"));
@@ -51,7 +64,7 @@ class PremiumServiceTest {
             "147, 132.00",
             "200, 132.00"})
     public void calculatePremiumWithDifferentPowerRanges(int power, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(power, BONUS_MALUS_LEVEL, NO_RISK_ZIP_CODE,1L);
+        PremiumRequestDTO input = new PremiumRequestDTO(power, BONUS_MALUS_LEVEL, NO_RISK_ZIP_CODE, 1L);
 
         Coverage coverage = new Coverage();
         coverage.setPercentagePremium(new BigDecimal("0.88"));
@@ -68,7 +81,7 @@ class PremiumServiceTest {
             "6667, 92.40",
             "9999, 92.40"})
     public void calculatePremiumWithDifferentRiskLocations(int zipCode, String expectedPremium) {
-        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode,1L);
+        PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode, 1L);
         Coverage coverage = new Coverage();
         coverage.setPercentagePremium(new BigDecimal("0.88"));
         coverage.setMaxPremium(new BigDecimal("132"));

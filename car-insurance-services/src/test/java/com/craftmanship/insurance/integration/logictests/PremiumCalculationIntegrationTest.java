@@ -1,21 +1,35 @@
 package com.craftmanship.insurance.integration.logictests;
 
+import com.craftmanship.insurance.InsuranceServicesApplication;
 import com.craftmanship.insurance.model.PremiumRequestDTO;
 import com.craftmanship.insurance.model.PremiumResponseDTO;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = InsuranceServicesApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PremiumCalculationIntegrationTest {
     public static final int NO_RISK_ZIP_CODE = 4000;
     public static final int STANDARD_POWER = 100;
     public static final int BONUS_MALUS_LEVEL = 9;
+    @LocalServerPort
     private int port = 8080;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
 
     @ParameterizedTest
     @CsvSource({" 0, 44.00",
@@ -37,13 +51,14 @@ public class PremiumCalculationIntegrationTest {
             " 17, 176.00"})
     public void calculatePremiumWithDifferentBonusMalusLevels(int bonusMalusLevel, String expectedPremium) {
         PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, bonusMalusLevel, NO_RISK_ZIP_CODE,3L);
+
         BigDecimal result =
-                given()
-                        .contentType("application/json")
-                        .body(input)
-                        .when()
-                        .post(createURLWithPort("/premium"))
-                        .as(PremiumResponseDTO.class).premium();
+                restTemplate.postForEntity(
+                                createURLWithPort("/premium"),
+                                input,
+                                PremiumResponseDTO.class)
+                        .getBody()
+                        .premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -59,12 +74,12 @@ public class PremiumCalculationIntegrationTest {
         PremiumRequestDTO input = new PremiumRequestDTO(power, 9, NO_RISK_ZIP_CODE,3L);
 
         BigDecimal result =
-                given()
-                        .contentType("application/json")
-                        .body(input)
-                        .when()
-                        .post(createURLWithPort("/premium"))
-                        .as(PremiumResponseDTO.class).premium();
+                restTemplate.postForEntity(
+                                createURLWithPort("/premium"),
+                                input,
+                                PremiumResponseDTO.class)
+                        .getBody()
+                        .premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -80,12 +95,12 @@ public class PremiumCalculationIntegrationTest {
         PremiumRequestDTO input = new PremiumRequestDTO(STANDARD_POWER, BONUS_MALUS_LEVEL, zipCode,3L);
 
         BigDecimal result =
-                given()
-                        .contentType("application/json")
-                        .body(input)
-                        .when()
-                        .post(createURLWithPort("/premium"))
-                        .as(PremiumResponseDTO.class).premium();
+                restTemplate.postForEntity(
+                                createURLWithPort("/premium"),
+                                input,
+                                PremiumResponseDTO.class)
+                        .getBody()
+                        .premium();
 
         assertThat(result).isEqualTo(new BigDecimal(expectedPremium));
     }
@@ -94,12 +109,13 @@ public class PremiumCalculationIntegrationTest {
     public void calculatePremiumWithValidContract() {
         PremiumRequestDTO input = new PremiumRequestDTO(100, 9, 4000,3L);
 
-        var result = given()
-                .contentType("application/json")
-                .body(input)
-                .when()
-                .post(createURLWithPort("/premium"))
-                .as(PremiumResponseDTO.class).premium();
+        BigDecimal result =
+                restTemplate.postForEntity(
+                                createURLWithPort("/premium"),
+                                input,
+                                PremiumResponseDTO.class)
+                        .getBody()
+                        .premium();
 
         assertThat(result).isEqualTo(new BigDecimal("88.00"));
     }
@@ -114,13 +130,13 @@ public class PremiumCalculationIntegrationTest {
     public void calculatePremiumWithInvalidParamsShouldReturnPreconditionFailed(Integer power, Integer bonusMalus, Integer zipCode) {
         PremiumRequestDTO input = new PremiumRequestDTO(power, bonusMalus, zipCode,3L);
 
-        var result = given()
-                .contentType("application/json")
-                .body(input)
-                .when()
-                .post(createURLWithPort("/premium"));
+        var result =
+                restTemplate.postForEntity(
+                                createURLWithPort("/premium"),
+                                input,
+                                String.class);
 
-        assertThat(result.statusCode()).isEqualTo(412);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(412));
     }
 
     private String createURLWithPort(String uri) {
